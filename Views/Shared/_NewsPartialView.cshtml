@@ -1,0 +1,14 @@
+﻿@model SeesionASPCore.Models.News;
+
+<div class="card" style="width: 18rem;">
+    <img src="@(Model.urlToImage)" asp-append-version = "true" class="card-img-top" alt="..."/>
+    <div class="card-body">
+      <h5 class="card-title">@Model.Title</h5>
+        <p class="card-text">@Model.Description</p>
+        <p class="card-text">@Model.url</p>
+        <a href="#" class="btn btn-primary">View News</a>
+    </div>
+</div>
+
+
+@* this above code is the example of Dynamic type partial view... *@

@@ -1,0 +1,19 @@
+﻿@{
+    ViewData["Title"] = "About";
+}
+
+<h1>About</h1>
+
+<h3>@ViewBag.Data</h3> 
+@* this above code the example of accessing string by ViewData connected through Controller's action method.*@
+
+
+@* these below code is for accessing string with having to write code in Controller's action method. *@
+@* @using Microsoft.AspNetCore.Http;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor accessor;
+ *@
+@* <h3>@accessor.HttpContext.Session.GetString("MyKey")</h3> *@
+
+
+
+<h4>@TempData["SessionID"]</h4>

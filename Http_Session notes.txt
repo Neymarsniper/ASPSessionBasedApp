@@ -1,0 +1,405 @@
+﻿Package manager console line of code to make changes to our application that have changed in our SQL SERVER :
+Scaffold-DbContext "Server=DESKTOP-U88AMMB;Database=DbFirstApproch;Trusted_Connection=True;TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models
+
+About Sessions :
+
+In ASP.NET Core, a session is a way to store and manage user-specific data across multiple HTTP requests. Sessions are essential for maintaining stateful behavior in web applications. 
+Unlike stateless protocols like HTTP, which do not inherently maintain any information about previous requests, sessions enable you to keep track of data for a specific user or client 
+as they interact with your application.
+
+Here are the key aspects of sessions in ASP.NET Core:
+1. Session State: Sessions allow you to store and retrieve data associated with a particular user during their visit to your website. 
+                  This data can include user preferences, shopping cart contents, login status, and other user-specific information.
+2. Session Middleware: ASP.NET Core provides built-in middleware for managing sessions. This middleware handles the creation and management of session objects for you.
+3. Session Storage: Session data can be stored in various ways, including in-memory storage, distributed cache (like Redis), or even a custom storage provider. 
+                    You can configure the session storage mechanism that best suits your application's needs.
+4. Session Id: Each user is assigned a unique session ID, usually stored as a cookie or in the URL, which is used to associate subsequent requests with their session data.
+5. Session Timeout: You can configure the session timeout, which determines how long session data is retained on the server. Once the session expires, the associated data is removed.
+6. Session Access: You can access session data from your controllers, views, or other parts of your ASP.NET Core application. This allows you to read and modify session values as needed.
+
+
+
+It is a state management technique: 
+---Sessions are a way to manage and maintain state in web applications, allowing you to store and access data across multiple HTTP requests.
+
+Session state is an ASP.NET Core scenario for storage of user data while the user browses a web page: 
+---Session state is primarily used to store user-specific data during a user's interaction with a web application.
+
+Session state uses a store maintained by the app to persist data across requests from a client: 
+---Session data is stored on the server-side, often in a storage mechanism like in-memory cache or a distributed cache like Redis.
+
+The session data is backed by a cache and considered ephemeral data/Temporary data: 
+---Session data is typically cached for a limited time and is temporary in nature. It's not meant for long-term data storage.
+
+Critical application data should be stored in the user database and cached in session only as a performance optimization: 
+---Session data should be used for non-critical, temporary data. Important and persistent data should be stored in a database, with session data used for improving performance or user experience.
+
+The session is specific to the browser and is not shared with other browsers: 
+---Each user's session is unique to their browser. Data stored in one user's session is not accessible to other users.
+
+Sessions are deleted when the browser session ends: 
+---Session data typically expires and is removed when the user closes their browser or remains inactive for a specified period (session timeout).
+
+Sessions are server-side: Session data is stored and managed on the server, unlike cookies, which are stored on the client-side.
+
+Unlike cookies which are stored on the client side, sessions are stored on the server side: 
+---This reiterates the server-side nature of sessions as compared to client-side cookies.
+
+Session is also used to pass data within the application and unlike TempData: 
+---Sessions can be used to pass data between different parts of the application and are different from TempData, 
+   which is a short-lived storage mechanism used specifically for passing data between actions during a single request.
+
+It persists for its expiration time but the time can be increased or decreased; the default time is 20 minutes: 
+---Sessions have a configurable timeout, and by default, they last for 20 minutes. This timeout can be adjusted as needed.
+   to do this we must include this code (Options => { options.IdleTimeout = TimeSpan.FromMinute(10); }) in AddSession Method in program.cs file.
+
+Session is valid for all requests, not for a single redirect: 
+---Session data remains available for the duration of a user's session, which includes multiple requests and redirects.
+
+A session state stores application-specific data in Key-value pairs: 
+---Session data is typically organized as key-value pairs, making it easy to store and retrieve information.
+
+A session state stores user-specific information for ASP applications: 
+---Sessions are particularly useful for storing information that is specific to individual users, such as their login status or shopping cart contents.
+
+However, the scope of the session is limited to the current browser session: 
+---While sessions store user-specific data, they are limited to the current session, and the data will not persist across different browser sessions.
+
+When many users access an application simultaneously, then each user will have a different session state: 
+---Each user's session is separate and independent, even when multiple users are accessing the application concurrently.
+
+Every session has a unique session ID; we can access that through TempData via views: 
+---Sessions are identified by a unique session ID, which can be accessed within views or controllers to retrieve and manage session data. However, 
+it's worth noting that TempData is typically used for temporary data between actions within the same request, while session data persists across multiple requests within a session.
+
+
+
+
+Difference between Sessions and Cookies :
+Sessions:
+Server-Side Storage: Sessions store data on the server side. When a user interacts with a web application, the server keeps track of their session data, typically in memory or in a database.
+
+User-Specific: Sessions are typically used to store user-specific data, such as login status, shopping cart contents, and other personalized information.
+
+Security: Session data is generally more secure than cookies because it's stored on the server. However, it's still susceptible to server-side vulnerabilities.
+
+Lifetime: Sessions have a limited lifetime, often determined by a timeout or when the user logs out or closes their browser. Session data is temporary and is automatically removed when it expires.
+
+Scope: The scope of a session is limited to the current user's interaction with the application and is not shared with other users.
+
+Complex Data: Sessions can store complex data structures, such as objects or arrays, as session variables.
+
+Usage: Commonly used for storing user authentication tokens, shopping cart contents, and user-specific preferences.
+
+Session Storage:
+
+Server-Side: Session data is primarily stored on the server. When a user visits a website and a session is initiated, the server creates a unique session ID for that user's session. 
+This session ID is used to associate the user's data with their session.
+
+Session Storage Mechanisms: The actual storage mechanism for session data can vary. Common options include in-memory storage, databases, 
+and distributed cache systems (e.g., Redis). The choice of storage mechanism depends on the application's configuration.
+
+Session Timeout: The server manages the session's lifecycle, including when it is created and when it expires. 
+When the session expires (due to inactivity or a predefined timeout), the associated session data is removed from the server.
+
+
+Cookies:
+Client-Side Storage: Cookies store data on the client side. When a server sends a response to a client's request, it can include cookies in the response headers, 
+which are then stored on the client's device.
+
+User-Agnostic: Cookies are often used for user-agnostic data, such as tracking and analytics information. They can be used to identify a client but not necessarily a specific user.
+
+Security: Cookies can be less secure than sessions because they are stored on the client's device and can be manipulated or stolen. However, secure and HttpOnly cookies can enhance their security.
+
+Lifetime: Cookies can have different lifetimes, including session cookies (deleted when the browser is closed) and persistent cookies (with expiration dates set by the server).
+
+Scope: Cookies can be shared across multiple users if the server sets them to be accessible to a broader domain or path.
+
+Simple Data: Cookies are typically limited to storing simple data as key-value pairs in string format.
+
+Usage: Commonly used for tasks like tracking user preferences, remembering login credentials, and supporting website personalization.
+
+Cookie Storage:
+
+Client-Side: Cookies are stored on the user's machine (client-side). When a server sends a response to the user's browser, it can include one or more cookies in the response headers.
+
+Browser Storage: The user's browser then stores these cookies locally on their device. 
+Cookies are typically stored in a dedicated folder on the user's hard drive or in memory, depending on the browser and the type of cookie.
+
+Lifetime: Cookies can have different lifetimes. Some cookies are session cookies and are deleted when the user closes their browser. 
+Others are persistent cookies with expiration dates set by the server, and they are stored on the user's machine until they expire or are manually deleted by the user.
+
+
+
+Here are some key characteristics of HTTP being stateless:
+
+No Context Retention: HTTP does not retain any information about the client or the previous requests it has made. Each request is isolated from the others.
+
+No Server-Side Session: The server doesn't automatically remember or maintain any data about the client's session or state between requests. 
+This is in contrast to stateful protocols where the server retains information about the client's session.
+
+Simplicity: The statelessness of HTTP contributes to its simplicity and scalability. Because each request is self-contained, it's easier to design and build distributed systems.
+
+Client-Server Interaction: In a stateless HTTP interaction, the client must include all necessary information in each request for the server to understand and process it. 
+This typically includes information like the HTTP method (GET, POST, etc.), headers, and any data (such as form submissions or query parameters).
+
+While HTTP itself is stateless, many web applications require some form of state management to maintain user sessions, 
+track user authentication, and remember user-specific data across multiple requests. To address this, developers use techniques like 
+sessions, cookies, and tokens to create a sense of statefulness within stateless HTTP, allowing web applications to function as if they have memory of previous interactions.
+
+
+
+Topics to cover :
+We will discuss about Request, Response, Server and Session Objects tomorrow...
+also will discuss about how http request life cycle is
+like from when user enters URL in browser address bar to how it finally renders the result back in browser..
+
+
+
+
+About Request, Response, Server, Session Objects :
+These are the fundamental components that allow you to interact with and manage the flow of data between a client (usually a web browser) and a web server.
+These objects play crucial roles in handling HTTP requests and responses and managing user sessions.
+
+Request Object :  
+1. The Request object represents an incoming HTTP request from a client (typically a web browser). 
+
+2. It includes information about the request, including the HTTP method (GET, POST, etc.), headers, URL, query parameters, and any data sent with the request (e.g., form data or JSON payloads).
+
+3. It contains information such as the HTTP method (GET, POST, PUT, DELETE, etc.), headers, URL, query parameters, form data, and often cookies.
+
+4. Here is a list of common information that a Request object typically includes:
+    a. HTTP Method (Request Method) : Indicates the type of action the client wants to perform on the resource. 
+       Common methods include GET (retrieve data), POST (submit data), PUT (update data), and DELETE (remove data).
+  
+  b. URL (Uniform Resource Locator) : Includes the path, query parameters, and fragment identifier (if present).
+  
+  c. Headers : HTTP headers provide additional metadata about the request. 
+       Common headers include: Information about the client, the host and port info from the URL, contains cookies about the client for maintaining session info, Authorization for authentication.
+       Developers can include custom headers to transmit additional information.
+  
+  d. Query parameters : for GET method they are included in the URL only after ? symbol represented by 'q' example, "?q=Web+Development".
+  
+  e. Body(Form-Data) : This data is often in the form of key-value pairs and is used for submitting forms or sending structured data (e.g., JSON or XML).
+                        For POST and PUT requests, data submitted by the client is included in the request body.
+  
+  f. client IP Address: IP of the user making the request, this is useful for tracking and security purpose.
+    
+  g. Session Information :  a session identifier (e.g., a cookie or token) may be included in the request to associate it with a specific user's session.
+   
+  h. Other Metadata : Additional information related to the request, such as the request's timestamp.
+
+Response Object :
+1. The Response object represents the server's response to a client's Request.
+
+2. It contains data that is sent back to the client, typically in the form of an HTML page, JSON data, or other content types.
+
+3. The server uses this object to send appropriate content back to the client based on the request.
+
+4. Here is a list of common information that a Response object typically includes:
+    a. HTTP Status Code : Indicates the outcome of the request : 200 OK: The request was successful, and the server is sending back the requested data.
+                                                                 201 Created: The request has successfully created a new resource.
+                                                                 204 No Content: The request was successful, but there is no data to return.
+                                                                 400 Bad Request: The request is malformed or invalid.
+                                                                 401 Unauthorized: Authentication is required, and the user is not authenticated.
+                                                                 403 Forbidden: Authentication is valid, but the user does not have permission.
+                                                                 404 Not Found: The requested resource does not exist.
+                                                                 500 Internal Server Error: Indicates a server-side error.
+    
+    b. HTTP Headers : Content-Type: Specifies the type of data included in the response (e.g., text/html, application/json).    
+                      Content-Length: The length of the response body in bytes.
+                      Location: For redirect responses (3xx status codes), it indicates the URL to which the client should be redirected.
+                      Set-Cookie: Used for setting cookies in the client's browser for session management.
+    
+    c. Response Body : The response body contains the actual data being sent from the server to the client. The format of the data depends on the Content-Type header.
+                      For HTML responses, it includes the HTML markup.
+                      For JSON responses, it contains structured data in JSON format.
+                      For file downloads, it might contain binary data.
+    
+    d. Cookies : If the server needs to set or modify cookies on the client side, this information is often included in the Response object's headers.
+    
+    e. Redirect Information (for redirect responses) : In the case of a redirect (status codes 301, 302, 307, etc.), the Location header indicates the URL to which the client should be redirected.
+    
+    f. Server Information : Some servers may include information about the server software and version in response headers (e.g., Server: Apache/2.4.29).
+
+Server Object :
+1. The "Server" object typically refers to the server-side code or component that handles incoming HTTP requests and generates HTTP responses.
+
+2. It's not a specific object like the Request and Response objects, which are well-defined structures used in web programming.
+
+3. Here's what you might find in the "Server" component or code when responding to a client request :
+    a. Request Handling Logic : The "Server" component includes logic to process incoming HTTP requests. This logic parses the Request object to 
+                                determine what action to take based on the request method, URL, headers, and other request data.
+    
+    b. Response Generation Logic : The "Server" component is responsible for generating HTTP responses. 
+                                   It constructs a Response object with the appropriate status code, headers, and response body based on the request's requirements.
+    
+    c. Routing and URL Mapping : In web applications, the server often includes routing and URL mapping mechanisms to direct incoming requests
+                                 to specific handlers, controllers, or functions based on the URL's path or other criteria.
+
+4. Regarding the connection between the Response object and server object : 
+                                    a. The "Server" object, or the server-side code and logic, is responsible for creating and populating the Response object.
+                                    
+                                    b. When a client's request is received and processed by the server, the server-side code determines the appropriate HTTP status code, headers, and response body.
+                                    
+                                    c. The server-side code constructs the Response object, sets its properties (status code, headers, body), and sends it back to the client as the HTTP response.
+                                    
+                                    d. It is the code responsible for request handling, response generation, and various server-side tasks, 
+                                    while the Response object represents the specific HTTP response being sent back to the client in response to a particular request.
+
+Session Object :
+1. The Session object is used to manage user sessions in web applications. A session is a way to store data associated with a particular user across multiple HTTP requests.
+
+2. It enables the server to maintain stateful interactions with clients. This is important for tracking user authentication, shopping carts, and other user-specific data.
+
+3. Sessions are often implemented using cookies or URL parameters, and a unique session ID is associated with each user.
+
+4. The information stored in a session object can vary depending on the specific needs of the application, but it commonly includes the following types of data:
+    a. Session ID, b. User Authentication Data, c. User Profile Information, d. Session Timeout and Expiry Information, e. User Preferences, f. Access Control Information.
+
+5. It's important to note that the session object is typically stored on the server side to ensure security and data integrity.
+
+
+Question : What happens when we enter a URL in the address bar?
+Answer : When you enter a URL (Uniform Resource Locator) into the address bar of a web browser and press Enter, 
+
+a series of complex steps are triggered that involve communication between the client (your web browser) and the web server hosting the requested website. 
+
+The following is a detailed description of what happens during this process:
+1. User Input : You type a URL into the browser's address bar. The URL typically consists of the protocol (e.g., "http://" or "https://"), domain (e.g., "www.example.com"), and path (e.g., "/page").
+
+2. DNS Resolution : The browser parses the URL to extract the domain name ("www.example.com"). 
+    The browser sends a DNS (Domain Name System) query to a DNS resolver or DNS server to translate the domain name into an IP address.
+    The DNS server responds with the IP address associated with the domain name.
+    so we can not memorize all the IP address of the websites on the web thats why they all are given domain name through DNS.
+        Steps :
+            a. firstly our web browser or OS will check the Cache memory then if not found it will send the query to the Resolver server.
+        
+            b. Resolver server is basically our ISP, so when it recieves the query then it will check its own cache memory.
+        
+            c. if not found it will send the query to next server that is Root Server. there are 13 different Set of these Root Servers operated by 12 organisations around the world.
+        
+            d. Each Set of Root Server has its own unique IP Address. so when the requested query is sent to the root server than it will figure out that to which TLD to send the specific query.
+        
+            e. then the Resolver will ask the .com server inside the TLD(top level domain) server to find the IP of that particular domain name ending with .com or .in.
+        
+            f. TLD will also dont know the particular IP address of the website then it redirect the request to the Final Server that is Authoritative name server.
+        
+            g. then resolver will ask the final server the IP address of the requested website. then redolver will recieve the IP address and forward it to the Client machine.
+        
+            h. the resolver server will store the IP adress of the paritcular website in its cache memory for future use to retrieve it faster.
+
+3. Initiating the HTTP request : Once the DNS resolution process is complete, the browser receives the IP address of the web server hosting the desired website. 
+                  This IP address is the destination where the browser needs to establish a connection to retrieve the website's content.
+                  After obtaining the IP address, the browser initiates an HTTP request to the web server associated with that IP address. 
+                  This HTTP request is constructed based on the URL, including the domain name and any specific path or resource within the website.
+
+4. Establishing a TCP Connection : The browser establishes a TCP (Transmission Control Protocol) connection with the web server using the resolved IP address and port 80 (HTTP) or port 443 (HTTPS).
+
+5. TLS Handshake (HTTPS Only): If the requested URL uses HTTPS, a TLS (Transport Layer Security) handshake occurs to establish a secure encrypted connection between the browser and the server.
+
+6. Sending the HTTP Request : Once the connection is established, the web browser sends the HTTP request to the web server's IP address over the established connection.
+               The HTTP request is transmitted in the form of plain text and includes the following information:
+                        HTTP method (e.g., GET, POST, PUT)
+                        Request headers (e.g., User-Agent, Accept-Encoding)
+                        Requested resource (e.g., /index.html)
+                        Any additional data, if applicable (e.g., form data for a POST request)
+
+7. Receiving the HTTP Request (Server-Side) : The web server receives the incoming HTTP request. The web server parses the request to determine the requested resource.
+
+8. Processing the Request (Server-Side) : Upon receiving the HTTP request, the web server processes it based on the method (e.g., GET) and the requested resource.
+
+9. Generating an HTTP Response : The web server generates an HTTP response, which includes an HTTP status code (e.g., 200 OK), response headers, and the response body (e.g., HTML content).
+
+10. Sending the HTTP Response : The web server sends the HTTP response back to the web browser using the same TCP/IP connection. The response is transmitted as plain text.
+
+11. Receiving and Processing the Response : The web browser receives the HTTP response and processes it based on the status code and content type.
+
+12. Rendering the Web Page (Client-Side): The browser renders the web page by parsing the HTML content, applying CSS styles, and executing JavaScript code.
+                                          It constructs the Document Object Model (DOM) representing the web page's structure and layout.
+
+13. Displaying the Web Page (Client-Side) : The browser displays the fully rendered web page in its window, allowing the user to view and interact with the content.
+
+
+
+
+
+Question : can this above process happens with the localhost url generated when we run our ASP.Net MVC project?
+Answer :
+1. Building the Application : Before starting the application, Visual Studio builds the ASP.NET Core MVC project. 
+                This process compiles your source code, turning your source code into executable files and libraries.
+
+2. Starting the Web Server : The ASP.NET Core framework uses a lightweight web server called Kestrel to host web applications.
+                Kestrel binds to a specific port on your local machine, such as port 5000 for HTTP or 5001 for HTTPS. It listens for incoming HTTP requests on this port.
+                Once Kestrel is running and listening on the designated port, it is ready to receive and handle incoming HTTP requests from web clients (e.g., web browsers).
+
+3. Launching the Browser : Visual Studio opens a web browser and navigates to the URL of your application. This URL is typically in the format http://localhost:port.
+
+4. Request Processing : 
+        a. Browser Sends an HTTP Request : When you enter a URL in your web browser's address bar and press Enter, the browser sends an HTTP request to the server identified by that URL.
+        
+        b. HTTP Request Received by Server : The HTTP request is received by the ASP.NET Core MVC application running on the server (in this case, the Kestrel web server).
+
+5. Middleware Pipeline : The ASP.NET Core middleware pipeline consists of a series of components (middleware) that can process and modify the incoming request and outgoing response.
+           Middleware components can handle tasks like routing, authentication, authorization, logging, and more.
+           The request flows through this pipeline, and each middleware component has an opportunity to process or modify it.
+           Each middleware component has a specific responsibility and can perform tasks such as authentication, authorization, logging, request/response modification, error handling, and more.
+           Middleware components are executed in the order they are added to the pipeline, and each component can decide whether to pass the request along to the next component or short-circuit the pipeline.
+        Some common middleware components include:
+                Authentication Middleware: Handles user authentication and sets the user identity.
+                Authorization Middleware: Enforces access control policies.
+                Routing Middleware: Handles URL routing and determines the controller action to execute.
+                Static File Middleware: Serves static files like CSS, JavaScript, and images.
+                Error Handling Middleware: Captures and handles exceptions during request processing.
+                Custom Middleware: Developers can create their own middleware components to perform specific tasks.
+        Middleware Execution:
+                As the request progresses through the pipeline, each middleware component has the opportunity to inspect, modify, or handle the request and response.
+                Middleware components can read request headers, set response headers, modify the request path, and perform other actions as needed.
+                Middleware can also terminate the request processing by not calling the next middleware component if, for example, an authorization check fails or an error is encountered.
+
+6. Routing : One of the key middleware components in an MVC application is the routing middleware. 
+             It examines the request's URL and determines which controller and action method should handle the request.
+             It also extracts any route parameters from the URL and passes them to the controller action.
+
+7. Controller Execution : Once the routing middleware identifies the appropriate controller and action method, it invokes that method, passing any route parameters and request data as method parameters.
+                The controller action performs the necessary processing, such as querying a database, and prepares a model to be used in rendering a view.
+
+8. View Rendering : The controller action typically returns a view, which is an HTML template that may include dynamic data from the model.
+            The Razor view engine processes the view, substitutes dynamic content, and generates the final HTML.
+
+9. Response Generation : The HTML generated by the view, along with any other resources (e.g., stylesheets, JavaScript files), is combined to create an HTTP response.
+
+10. Sending the Response : The HTTP response is sent back to Kestrel, which, in turn, sends it to the web browser that made the initial request.
+
+11. Browser Rendering : The browser receives the HTTP response and renders the web page based on the HTML and resources it contains.
+
+12. Application Lifecycle: Throughout this process, your application's startup code is executed. This includes configuring services, middleware, and application settings defined in the Startup.cs file.
+
+
+
+Question : What happens behind the scene when we perform CRUD operations on our browser and the changes reflect on our SQL server database?
+Answer : 
+
+
+
+
+Question : Difference between Kestrel and Http.sys web server?
+Answer : 
+
+
+
+
+Question : When we click on the URL stored in our local machine, how it opens up in the default browser?
+Answer : When you click on a link stored in a local file on your computer, it can open up in your default web browser through a process known as "file protocol handling."
+
+1. Clicking the Link: When you click on a link within a local file (e.g., an HTML file or a document like a PDF or Word file), 
+                your computer's operating system detects the click event.
+
+2. File Protocol Handling: The operating system recognizes that the link is a reference to a file on your local system. 
+                It determines which program or application should handle the file based on its extension or type.
+
+3. Opening the Default Browser: If the link is an HTML file or a web-related resource (e.g., an image with an absolute URL), 
+                the operating system may open your default web browser to handle the request. It essentially treats the file as if it were a web page or a web resource.
+
+4. Displaying the Content: The web browser loads the content specified by the link. If it's an HTML file, the browser renders and displays the HTML content. 
+                If it's another type of file (e.g., PDF, Word document), the browser may use a built-in or external plugin to display or download the content.
