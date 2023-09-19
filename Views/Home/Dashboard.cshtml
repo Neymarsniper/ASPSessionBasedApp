@@ -11,9 +11,18 @@
 
 
 
+<h1>Successfully Logged-In Get access to Latest News....</h1>
 
-
-
+@* this below code is for the Dropdown menu *@
+<div class="dropdown">
+    <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Click to select NEWS!</button>
+    <ul class="dropdown-menu">
+        <li><a class="dropdown-item" asp-controller="Home" asp-action="NewsDetails" asp-route-Id="1">News 1</a></li>
+        <li><a class="dropdown-item" asp-controller="Home" asp-action="NewsDetails" asp-route-Id="2">News 2</a></li>
+        <li><a class="dropdown-item" asp-controller="Home" asp-action="NewsDetails" asp-route-Id="3">News 3</a></li>
+        <li><a class="dropdown-item" asp-controller="Home" asp-action="NewsDetails" asp-route-Id="4">News 4</a></li>
+    </ul>
+</div>
 
 
 
